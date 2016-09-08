@@ -1,0 +1,31 @@
+<div style="margin:20px 0;"></div>
+<div class="easyui-accordion" data-options="fit:true,border:false">
+		<div title="新闻管理" data-options="iconCls:'icon-ok'" style="overflow:auto;padding:10px;">
+			<ul>
+				<li><a class="easyui-linkbutton menu" href="news.html">浏览新闻</a></li>
+			</ul>
+		</div>
+		<div title="用户管理" data-options="iconCls:'icon-help'" style="padding:10px;">
+			<ul>
+				<li><a class="easyui-linkbutton menu" href="users.html">浏览用户</a></li>
+			</ul>
+		</div>
+		<div title="类型管理" data-options="iconCls:'icon-search'" style="padding:10px;">
+			 <ul>
+				<li><a class="easyui-linkbutton menu" href="type.html">浏览类型</a></li>
+			</ul>
+		</div>
+	</div>
+	
+	<script type="text/javascript">
+	//点击左边导航栏de的linkbutton按钮，将对应的Href页面在center部分显示
+	$(function(){
+	    $(".menu").click(function(){
+	    	var href=$(this).attr("href");
+	    	//alert(href);
+	    	//console.info(window.main_panel);
+	    	window.main_panel.panel("refresh",href);
+	    	return false;	    
+	    });	
+	});	
+	</script>

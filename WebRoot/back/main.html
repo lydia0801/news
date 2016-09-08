@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>main.html</title>
+	
+    <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+    <meta http-equiv="description" content="this is my page">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="../easyui/css/easyui.css"/>
+    <link rel="stylesheet" type="text/css" href="../easyui/css/icon.css"/>
+     <link rel="stylesheet" type="text/css" href="../css/back_main.css"/>
+    <script type="text/javascript" src="../easyui/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../easyui/js/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="../easyui/js/easyui-lang-zh_CN.js"></script>
+     <script type="text/javascript" src="../easyui/js/main.js"></script>
+    
+  </head>
+  
+  <body class="easyui-layout">
+     <div data-options="region:'north' ,border:false" id="newslogo" style="height:120px;">
+  		<ul>
+  			<li>
+  				<a class="easyui-linkbutton" data-options="plain:true" href="javascript:void(0)">修改密码</a>
+  			</li>
+  			<li>
+  				<a class="easyui-linkbutton" data-options="plain:true" href="javascript:void(0)">安全退出</a>
+  			</li>
+  		</ul>
+    </div>
+    
+    <div data-options="region:'west',title:'导航'" style="width:180px;">
+    	<ul class="easyui-tree" id="menu_tree"> 
+    		<li>
+    			<span>菜单</span>
+    			<ul>
+    				<li id="admin_content"><span>管理员信息管理</span></li>
+		    		<li id="user_content"><span>会员信息管理</span></li>
+		    		<li id="type_content"><span>新闻类型管理</span></li>
+		    		<li data-options="state:'closed'">
+		    			<span>新闻信息管理</span>
+		    			<ul>
+		    				<li id="addNews_content"><span>添加新闻</span></li>	
+		    				<li id="findNews_content"><span>浏览新闻</span></li>	
+		     			</ul>
+		    		</li>
+    			</ul>
+    		</li>
+    	
+    	</ul> 
+    </div>
+    
+    <div data-options="region:'east',split:true,collapsed:true,title:'帮助'"
+		style="width:100px;">
+		<img src="../images/weixin.jpg" width="90px" height="90px" />
+	</div>
+	
+    <div data-options="region:'south'" id="copyright" style="height:50px;background-color:#4D89BB;margin: 0px;padding: 0px;">
+    	<p>
+			<a href="http://www.hyycinfo.com">源辰信息科技有限公司</a> &copy; 版权所有
+			0734-8355998
+		</p>
+    </div>
+    <div data-options="region:'center'">
+    	<div id="content_index" class="easyui-tabs" data-options="fit:true" title="内容"></div>
+    </div>
+  </body>
+</html>

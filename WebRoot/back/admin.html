@@ -1,0 +1,138 @@
+<div id="admin_table"></div>
+<script>
+$(function(){
+	var  datagird ; //
+	var op;//所传入的对象
+	var editRow=undefined;//编辑的行
+	var flag;
+	datagird=$("#admin_table").datagrid({
+		url:'../admin.do',
+		queryParams:{op:"findBypage"},//查询条件
+		pagination:true,//分页属性
+		pageSize:3,//初始化时每页显示的行数
+		pageList:[1,3,5,7,9],//初始化每页数据显示的行数列表
+		columns:[[
+			{field:'aid',title:'管理员编号',width:200,align:'center'},
+			{field:'aname',title:'管理员姓名',width:200,align:'center',editor:{type:"text",options:{required:true}}},
+			{field:'apwd',title:'管理员密码',width:200,align:'center',editor:{type:"text",options:{required:true}}}
+		]],
+		toolbar:[{
+			text:'添加',
+			iconCls:'icon-add',
+			handler:function(){
+				flag="添加";
+				op="addAdmin";
+				//判断没有没正在被编辑的行
+				if(editRow!=undefined){//说明有正在被编辑的行，还原当前修改操作
+					datagird.datagrid("rejectChanges");//回滚自创建以来或自上次调用AcceptChanges，所有的变化数据。
+					datagird.datagrid("endEdit",editRow);//关闭当前正在编辑的行 
+					editRow=undefined;
+				}else{//在表格的最前面插入一行
+					datagird.datagrid("insertRow",{index:0,row:{}});
+					//打开编辑器
+					datagird.datagrid("beginEdit",0);
+					editRow=0;//记录当前正在被编辑的行
+				}
+			}
+		},'-',{
+			text:'编辑',
+			iconCls:'icon-edit',
+			handler:function(){
+				flag="修改";
+				 var rows =datagird.datagrid("getChecked")[0];
+				 if(rows==undefined){
+				 	$.messager.show({title:'温馨提示',msg:'请选择您要修改的数据.....',timeout:2000,showType:'slide'});
+				 }else{
+				 	op="updateAdmin";
+				 	if(editRow!=undefined){
+				 		datagird.datagrid("rejectChanges");//回滚自创建以来或自上次调用AcceptChanges，所有的变化数据。
+						datagird.datagrid("endEdit",editRow);//关闭当前正在编辑的行 
+						editRow=undefined;
+				 	}else{
+				 	   var index =datagird.datagrid("getRowIndex",rows);//获取当前选择行的索引
+				 	   datagird.datagrid("updateRow",{index:index,row:rows});
+				 	   //打开编辑器
+						datagird.datagrid("beginEdit",index);
+						editRow=0;//记录当前正在被编辑的行
+				 	}
+				 }
+			}
+		},'-',{
+			text:'删除',
+			iconCls:'icon-remove',
+			handler:function(){
+				 var rows =datagird.datagrid("getChecked");//获取所有被选择的行
+				 if(rows.length<=0){//没有选择任何一行
+				 	$.messager.show({
+				 		title:'温馨提示',msg:'请选择您要删除的数据.....',
+				 		timeout:2000,
+				 		showType:'slide'
+				 	});
+				 }else{
+				 	$.messager.confirm('信息确认','您确定要删除选择的数据吗?',function(r){
+				 		if(r){
+				 			var aids="";
+				 			for(var i =0;i<rows.length;i++){
+				 				aids+=rows[i].aid +","; 
+				 			}
+				 			//将要删除的数据aid发送给服务器端
+				 			$.post('../admin.do',{op:'deleteAdmin',aids:aids},function(data){
+				 				if(data==1){
+				 					$.messager.show({
+								 		title:'删除提示',
+								 		msg:'管理员信息删除成功...',
+								 		timeout:2000,
+								 		showType:'slide'
+							 		});
+							 		datagird.datagrid("reload");//重新加载数据
+				 				}else{
+				 					$.messager.alert("失败提示","管理员新删除失败....","error");
+				 				}
+				 			});
+				 		}
+				 	});
+				 }
+			}
+		},'-',{
+			text:'保存',
+			iconCls:'icon-save',
+			handler:function(){
+				datagird.datagrid("endEdit",editRow);//关闭当前操作的行
+				var rows=datagird.datagrid("getChanges")[0];//获取当前被修改的数据
+				if(rows==undefined){
+					datagird.datagrid("rejectChanges");//回滚自创建以来或自上次调用AcceptChanges，所有的变化数据。
+					datagird.datagrid("unselectAll");
+					editRow=undefined ;
+				}else{
+					rows["op"]=op;
+					$.post("../admin.do",rows,function(data){
+						if(data==1){
+							$.messager.show({
+						 		title:'温馨提示',
+						 		msg:'管理员'+flag+'成功...',
+						 		timeout:2000,
+						 		showType:'slide'
+						 	});
+						}else{
+							$.messager.alert("失败提示","管理员"+flag+"失败....","error");
+						}
+						rows=null;
+						datagird.datagrid("reload");//重新加载数据
+						datagird.datagrid("rejectChanges");//回滚自创建以来或自上次调用AcceptChanges，所有的变化数据。
+						datagird.datagrid("unselectAll");
+					});
+				}
+			}
+		},'-',{
+			text:'撤销',
+			iconCls:'icon-redo',
+			handler:function(){
+				datagird.datagrid("rejectChanges");//回滚自创建以来或自上次调用AcceptChanges，所有的变化数据。
+				datagird.datagrid("endEdit",editRow);
+				editRow=undefined ;
+			}
+		}]	
+	});
+});
+
+</script>
